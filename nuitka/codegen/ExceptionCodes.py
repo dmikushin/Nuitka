@@ -200,3 +200,48 @@ def generateBuiltinMakeExceptionCode(to_name, expression, emit, context):
                 emit=emit,
                 context=context,
             )
+
+        if expression.getExceptionName() == "ImportError":
+            from .PythonAPICodes import getReferenceExportCode
+
+            import_error_name_expression = expression.getImportErrorName()
+
+            if import_error_name_expression is not None:
+                exception_importerror_name = context.allocateTempName(
+                    "make_exception_importerror_name"
+                )
+
+                generateExpressionCode(
+                    to_name=exception_importerror_name,
+                    expression=import_error_name_expression,
+                    emit=emit,
+                    context=context,
+                    allow_none=True,
+                )
+
+                getReferenceExportCode(exception_importerror_name, emit, context)
+                emit(
+                    "((PyImportErrorObject *)%s)->name = %s;"
+                    % (to_name, exception_importerror_name)
+                )
+
+            import_error_path_expression = expression.getImportErrorPath()
+
+            if import_error_path_expression is not None:
+                exception_importerror_path = context.allocateTempName(
+                    "make_exception_importerror_path"
+                )
+
+                generateExpressionCode(
+                    to_name=exception_importerror_path,
+                    expression=import_error_path_expression,
+                    emit=emit,
+                    context=context,
+                    allow_none=True,
+                )
+
+                getReferenceExportCode(exception_importerror_path, emit, context)
+                emit(
+                    "((PyImportErrorObject *)%s)->path = %s;"
+                    % (to_name, exception_importerror_path)
+                )
