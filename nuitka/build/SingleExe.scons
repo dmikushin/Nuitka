@@ -1119,7 +1119,7 @@ def _detectVirtualEnvPrefix():
 
 _detectVirtualEnvPrefix()
 
-if win_target:
+if win_target and not mingw_mode:
     # On Windows, the installation layout is relatively fixed.
     python_header_path = os.path.join(python_prefix, "include")
 else:
@@ -1152,7 +1152,7 @@ def getWindowsPythonDLLPath():
     return os.environ["NUITKA_PYTHON_DLL_PATH"]
 
 
-if win_target:
+if win_target and not mingw_mode:
     # Anaconda has this.
     static_lib_filename = os.path.join(
         python_prefix,
