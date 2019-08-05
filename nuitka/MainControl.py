@@ -652,7 +652,8 @@ def executeModule(tree, clean_path):
 def compileTree(main_module):
     source_dir = getSourceDirectoryPath(main_module)
 
-    if not Options.shallOnlyExecCCompilerCall():
+    #if not Options.shallOnlyExecCCompilerCall():
+    if True:
         if Options.isShowProgress() or Options.isShowMemory():
             info(
                 "Total memory usage before generating C code: {memory}:".format(
@@ -669,7 +670,9 @@ def compileTree(main_module):
                 filename=os.path.join(source_dir, "__frozen.c"), source_code=frozen_code
             )
 
-        if not isWin32Windows():
+
+        #if (not isWin32Windows()) or Options.isMingw64():
+        if True:
             writeBinaryData(
                 filename=os.path.join(source_dir, "__constants.bin"),
                 binary_data=ConstantCodes.stream_data.getBytes(),

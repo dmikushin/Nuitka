@@ -1270,7 +1270,7 @@ if debug_mode:
         env.Append(CCFLAGS=["-O2"])
 else:
     if gcc_mode:
-        env.Append(CCFLAGS=["-O3"])
+        env.Append(CCFLAGS=["-O0"])
 
         # Check inlining of calls, except in debug mode, where it will all be
         # wrong due to additional code.
@@ -1384,9 +1384,9 @@ if win_target and mingw_mode:
 
 constants_bin_filename = os.path.join(source_dir, "__constants.bin")
 
-if win_target:
+if win_target and not mingw_mode:
     resource_mode = "win_resource"
-elif gcc_mode and getLinkerArch() is not None:
+elif (gcc_mode and getLinkerArch() is not None) or mingw_mode:
     resource_mode = "linker"
 else:
     resource_mode = "code"
@@ -1637,8 +1637,8 @@ if win_target and gcc_mode and not clang_mode:
 
 # Avoid IO for compilation as much as possible, this should make the
 # compilation more memory hungry, but also faster.
-if gcc_mode:
-    env.Append(CCFLAGS="-pipe")
+#if gcc_mode:
+#    env.Append(CCFLAGS="-pipe")
 
 if "CPPFLAGS" in os.environ:
     env.Append(CCFLAGS=os.environ["CPPFLAGS"].split())
